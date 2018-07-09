@@ -23,15 +23,15 @@ const space = 0x20;
 const message = Array(target.length).fill(asciiCode('*'));
 
 [...target].forEach((c, i) => {
-  const ciphersChars = ciphers.map(cipher => cipher[i]);
-  ciphersChars.forEach((v, j) => {
-    let charsToMatch = ciphersChars.filter((c, k) => j !== k);
-    if (isSpace(v, charsToMatch)) {
-        message[i] = ciphersChars[j] ^ c ^ space
-    } else if (isSpace(c, charsToMatch)) {
-      message[i] = space;
-    }
-  })
+    const ciphersChars = ciphers.map(cipher => cipher[i]);
+    ciphersChars.forEach((v, j) => {
+        let charsToMatch = ciphersChars.filter((c, k) => j !== k);
+        if (isSpace(v, charsToMatch)) {
+            message[i] = ciphersChars[j] ^ c ^ space
+        } else if (isSpace(c, charsToMatch)) {
+            message[i] = space;
+        }
+    })
 
 });
 
