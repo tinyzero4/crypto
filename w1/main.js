@@ -2,8 +2,8 @@ const hexToAscii = (hex) => hex.match(/.{2}/g).map(v => parseInt(v, 16));
 const asciiToHex = (ascii) => ascii.map(v => Number(v).toString(16).padStart(2, "0"));
 
 const asciiCode = (c) => c.charCodeAt(0);
-const isAlphaNumeric = (code) => (0x41 < code < 0x5b) || (0x60 < code < 0x7b) || code === 0;
-const isSpace = (c, chars) => chars.every(v => isAlphaNumeric(v ^ c));
+const isAlphaNumeric = (code) => (code > 0x41 && code < 0x5b) || (code > 0x60 && code < 0x7b) || code === 0;
+const isSpace = (c, chars) => chars.filter(v => isAlphaNumeric(v ^ c)).length > 7;
 
 const c1 = '315c4eeaa8b5f8aaf9174145bf43e1784b8fa00dc71d885a804e5ee9fa40b16349c146fb778cdf2d3aff021dfff5b403b510d0d0455468aeb98622b137dae857553ccd8883a7bc37520e06e515d22c954eba5025b8cc57ee59418ce7dc6bc41556bdb36bbca3e8774301fbcaa3b83b220809560987815f65286764703de0f3d524400a19b159610b11ef3e';
 const c2 = '234c02ecbbfbafa3ed18510abd11fa724fcda2018a1a8342cf064bbde548b12b07df44ba7191d9606ef4081ffde5ad46a5069d9f7f543bedb9c861bf29c7e205132eda9382b0bc2c5c4b45f919cf3a9f1cb74151f6d551f4480c82b2cb24cc5b028aa76eb7b4ab24171ab3cdadb8356f';
@@ -27,11 +27,12 @@ const message = Array(target.length).fill(asciiCode('*'));
   ciphersChars.forEach((v, j) => {
     let charsToMatch = ciphersChars.filter((c, k) => j !== k);
     if (isSpace(v, charsToMatch)) {
-      message[i] = ciphersChars[j] ^ c ^ space
+        message[i] = ciphersChars[j] ^ c ^ space
+    } else if (isSpace(c, charsToMatch)) {
+      message[i] = space;
     }
   })
 
 });
 
-console.log(message.join(","));
 console.log(message.map(v => String.fromCharCode(v)).join(""));
