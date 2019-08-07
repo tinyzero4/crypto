@@ -3,6 +3,9 @@ package com.breedish.crypto.set1;
 import com.breedish.crypto.utils.ArrayUtils;
 import com.breedish.crypto.utils.Characters;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 import static com.breedish.crypto.utils.ArrayUtils.resolveBlock;
@@ -87,5 +90,14 @@ class Set1 {
 
         var key = keyBuilder.toString();
         return new String(xor(raw, key.getBytes()));
+    }
+
+    static String decryptAESECB(String in, String key) throws Exception {
+        var raw = Base64.getDecoder().decode(in.getBytes(UTF_8));
+
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        return new String(cipher.doFinal(raw), UTF_8);
     }
 }
