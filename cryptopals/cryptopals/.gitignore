@@ -2,3 +2,7 @@ target
 build
 *.class
 .idea
+.DS_Store
+*.iml
+*.ipr
+**/.DS_Store
