@@ -1,5 +1,7 @@
 package com.breedish.crypto.utils;
 
+import java.nio.charset.StandardCharsets;
+
 public abstract class Encoding {
 
     public static byte[] hex2Byte(String hex) {
@@ -20,5 +22,9 @@ public abstract class Encoding {
         }
 
         return buffer.toString();
+    }
+
+    public static String asString(byte[] in) {
+        return new String(in, StandardCharsets.UTF_8);
     }
 }
