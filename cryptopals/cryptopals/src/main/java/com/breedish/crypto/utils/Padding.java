@@ -23,4 +23,19 @@ public abstract class Padding {
         return Arrays.copyOf(in, in.length - paddingLength);
     }
 
+    public static byte[] validateAndRemovePadding(byte[] in) {
+        byte paddingLength = in[in.length - 1];
+        if (paddingLength <= 0 || paddingLength >= in.length) {
+            throw new IllegalStateException("Invalid padding");
+        }
+
+        byte count = paddingLength;
+        while (count > 0 && in[in.length - count] == paddingLength) {
+            count--;
+        }
+
+        if (count > 0) throw new IllegalStateException("Invalid padding");
+        return Arrays.copyOfRange(in, 0, in.length - paddingLength);
+    }
+
 }
