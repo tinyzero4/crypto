@@ -5,11 +5,8 @@ import com.breedish.crypto.utils.AES;
 import com.breedish.crypto.utils.ArrayOps;
 import com.breedish.crypto.utils.Encoding;
 import com.breedish.crypto.utils.Padding;
-import com.breedish.crypto.utils.RandomOps;
-import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -19,6 +16,7 @@ import static com.breedish.crypto.set2.Set2.encryptAESCBC;
 import static com.breedish.crypto.set2.Set2.padString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class Set2Test {
 
@@ -76,7 +74,7 @@ public class Set2Test {
             var res = oracleFunction(hackMessage, key, suffix);
             for (var e : mapping.entrySet()) {
                 if (Arrays.equals(e.getKey(), ArrayOps.extractBlock(res, key.length(), 0))) {
-                    suffixBuilder.append( e.getValue().substring(e.getValue().length() - 1));
+                    suffixBuilder.append(e.getValue().substring(e.getValue().length() - 1));
                     break;
                 }
             }
@@ -91,6 +89,28 @@ public class Set2Test {
         byte[] raw = Padding.paddingPKCS7(plainText.getBytes(), key.length());
 
         return AES.encryptECB(raw, key.getBytes(), false);
+    }
+
+    @Test
+    public void testChallenge15() {
+        assertThat(
+                Padding.validateAndRemovePadding("ICE ICE BABY\u0004\u0004\u0004\u0004".getBytes()),
+                is("ICE ICE BABY".getBytes())
+        );
+
+        try {
+            Padding.validateAndRemovePadding("ICE ICE BABY\u0005\u0005\u0005\u0005".getBytes());
+            fail();
+        } catch (IllegalStateException e) {
+            //ok
+        }
+        try {
+            Padding.validateAndRemovePadding("ICE ICE BABY\u0001\u0002\u0003\u0004".getBytes());
+            fail();
+        } catch (IllegalStateException e) {
+            // ok
+        }
+
     }
 
 }
