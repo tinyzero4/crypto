@@ -1,8 +1,6 @@
 package com.breedish.crypto.utils;
 
-import java.util.Arrays;
-
-public abstract class ArrayUtils {
+public abstract class ArrayOps {
 
     public static byte[][] transpose(byte[] in, int blocksCount) {
         int blockSize = in.length / blocksCount;
@@ -17,9 +15,13 @@ public abstract class ArrayUtils {
         return res;
     }
 
-    public static byte[] resolveBlock(byte[] in, int blockLength, int blockIndex) {
+    public static byte[] extractBlock(byte[] in, int blockLength, int blockIndex) {
         int from = Math.min(in.length, blockIndex * blockLength);
         int to = Math.min(in.length, from + blockLength);
-        return Arrays.copyOfRange(in, from, to);
+        return java.util.Arrays.copyOfRange(in, from, to);
+    }
+
+    public static void replaceBlock(byte[] block, byte[] target, int blockIndex) {
+        System.arraycopy(block, 0, target, block.length * blockIndex, block.length);
     }
 }

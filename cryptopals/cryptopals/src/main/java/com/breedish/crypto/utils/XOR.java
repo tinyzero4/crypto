@@ -1,6 +1,6 @@
 package com.breedish.crypto.utils;
 
-public abstract class XORUtils {
+public abstract class XOR {
 
     public static byte[] xor(byte[] left, byte[] right) {
         byte[] shorter = left;

@@ -1,6 +1,6 @@
 package com.breedish.crypto.set1;
 
-import com.breedish.crypto.utils.ArrayUtils;
+import com.breedish.crypto.utils.ArrayOps;
 import com.breedish.crypto.utils.Characters;
 
 import javax.crypto.Cipher;
@@ -8,11 +8,11 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
-import static com.breedish.crypto.utils.ArrayUtils.resolveBlock;
+import static com.breedish.crypto.utils.ArrayOps.extractBlock;
 import static com.breedish.crypto.utils.Encoding.byte2Hex;
 import static com.breedish.crypto.utils.Encoding.hex2Byte;
 import static com.breedish.crypto.utils.Hamming.hammingDistance;
-import static com.breedish.crypto.utils.XORUtils.xor;
+import static com.breedish.crypto.utils.XOR.xor;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 class Set1 {
@@ -69,7 +69,7 @@ class Set1 {
             int blockLength = raw.length / blocksCount;
             double distance = 0;
             for (int j = 0; j < blocksCount - 1; j++) {
-                distance += 1.0 * hammingDistance(resolveBlock(raw, i, j), resolveBlock(raw, i, j + 1)) / blockLength;
+                distance += 1.0 * hammingDistance(extractBlock(raw, i, j), extractBlock(raw, i, j + 1)) / blockLength;
             }
             distance /= blocksCount;
 
@@ -81,7 +81,7 @@ class Set1 {
 
         int blocksCount = keySize;
 
-        var blocks = ArrayUtils.transpose(raw, blocksCount);
+        var blocks = ArrayOps.transpose(raw, blocksCount);
 
         var keyBuilder = new StringBuilder();
         for (int i = 0; i < blocksCount; i++) {
